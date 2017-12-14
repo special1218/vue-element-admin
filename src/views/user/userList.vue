@@ -1,15 +1,15 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input style="width: 200px;" class="filter-item" placeholder="标题" v-model="listQuery.title">
+      <el-input style="width: 200px;" @keyup.enter.native="handleFilter" class="filter-item" placeholder="用户名" v-model="listQuery.username">
       </el-input>
-      <el-button class="filter-item" type="primary" v-waves icon="el-icon-search">搜索</el-button>
+      <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索</el-button>
       <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">添加</el-button>
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-download" @click="handleDownload">导出</el-button>
     </div>
 
     <el-table :data="list" v-loading="listLoading" element-loading-text="正在加载中..." border fit highlight-current-row style="width: 100%">
-		<el-table-column type="selection"width="55"></el-table-column>
+		<el-table-column type="selection"width="60"></el-table-column>
 
      <el-table-column align="center" label="序号" width="110">
         <template scope="scope">
@@ -68,7 +68,7 @@
 	      <el-form class="small-space" :model="temp" ref="temp" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
 	        <el-form-item label="姓名" prop="username"
 	        		:rules="[
-	        			{ required: true, message: '姓名不能为空'}
+	        			{ required: true, message: '姓名不能为空', trigger: 'blur'}
 	        		]"
 	        >
 	          <el-input v-model.trim="temp.username"></el-input>
@@ -78,12 +78,13 @@
 		        <el-radio-group v-model="temp.sex">
 				      <el-radio label="男"></el-radio>
 				      <el-radio label="女"></el-radio>
+				      <el-radio label="未知"></el-radio>
 				    </el-radio-group>
 			    </el-form-item>
 	
 	        <el-form-item label="Email" prop="email"
 	        		:rules="[
-	        			{ required: true, message: '电子邮件不能为空'}
+	        			{ required: true, message: '电子邮件不能为空', trigger: 'blur'}
 	        		]"
 	        >
 	          <el-input v-model.trim="temp.email"></el-input>
@@ -91,7 +92,7 @@
 	
 	        <el-form-item label="手机号" prop="phone"
 	        		:rules="[
-	        			{ required: true, message: '手机号不能为空'}
+	        			{ required: true, message: '手机号不能为空', trigger: 'blur'}
 	        		]"
 	        >
 	          <el-input v-model.trim="temp.phone"></el-input>
@@ -102,7 +103,7 @@
 	        </el-form-item>
 	      </el-form>
 	      <div slot="footer" class="dialog-footer">
-	        <el-button @click="dialogFormVisible = false">取 消</el-button>
+	        <el-button @click="resetForm('temp')">取消</el-button>
 	        <el-button type="primary" @click="updateData('temp')">确 定</el-button>
 	      </div>
 	    </el-dialog>
@@ -122,7 +123,6 @@ export default {
   },
   data() {
     return {
-      radio: '0',
       list: null,
       total: null,
       listLoading: true,
@@ -156,6 +156,9 @@ export default {
         this.listLoading = false
       })
     },
+    handleFilter() {
+      this.getList()
+    },
     handleSizeChange(val) {
       this.listQuery.limit = val
       this.getList()
@@ -175,7 +178,7 @@ export default {
       this.temp = {
         username: '',
         password: '888888',
-        sex: '',
+        sex: '男',
         email: '',
         phone: '',
         remark: ''
@@ -223,6 +226,10 @@ export default {
         }
       })
     },
+    resetForm(formName) {
+      this.dialogFormVisible = false
+      this.$refs[formName].resetFields()
+    },
     handleDelete(row) {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -261,7 +268,7 @@ export default {
         const tHeader = ['姓名', '性别', 'Email', '手机号', '备注']
         const filterVal = ['username', 'sex', 'email', 'phone', 'remark']
         const data = this.formatJson(filterVal, this.list)
-        export_json_to_excel(tHeader, data, 'table数据')
+        export_json_to_excel(tHeader, data, '用户信息')
       })
     },
     formatJson(filterVal, jsonData) {
@@ -272,7 +279,7 @@ export default {
           return v[j]
         }
       }))
-    } 
+    }
   }
 }
 </script>

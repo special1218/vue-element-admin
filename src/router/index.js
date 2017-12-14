@@ -55,17 +55,47 @@ export default new Router({
 
 export const asyncRouterMap = [
   {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/userList',
+    name: 'user',
+    meta: {
+      title: 'user',
+      icon: 'excel'
+    },
+    children: [
+      { path: 'userList', component: _import('user/userList'), name: 'userList', meta: { title: 'userList' }},
+      { path: 'upload-excel', component: _import('user/uploadExcel'), name: 'uploadExcel', meta: { title: 'uploadExcel' }}
+    ]
+  },
+
+  {
     path: '/product',
     component: Layout,
     redirect: 'noredirect',
     name: 'product',
     meta: {
-      title: '商品管理',
+      title: 'product',
       icon: 'component'
     },
     children: [
-      { path: 'productList', component: _import('product/productList'), name: 'markdown-demo', meta: { title: '商品列表' }},
-      { path: 'back-to-top', component: _import('product/backToTop'), name: 'backToTop-demo', meta: { title: 'backToTop' }}
+      { path: 'productList', component: _import('product/productList'), name: 'productList', meta: { title: 'productList' }},
+      { path: 'productAdd/:id', component: _import('product/productAdd'), name: 'productAdd', meta: { title: 'productAdd' }}
+    ]
+  },
+
+  {
+    path: '/banner',
+    component: Layout,
+    redirect: '/banner/bannerList',
+    name: 'banner',
+    meta: {
+      title: 'banner',
+      icon: 'excel'
+    },
+    children: [
+      { path: 'bannerList', component: _import('banner/bannerList'), name: 'bannerList', meta: { title: 'bannerList' }},
+      { path: 'bannerAdd/:id', component: _import('banner/bannerAdd'), name: 'bannerAdd', meta: { title: 'bannerAdd' }}
     ]
   },
 
@@ -75,7 +105,7 @@ export const asyncRouterMap = [
     redirect: 'noredirect',
     name: 'charts',
     meta: {
-      title: '报表管理',
+      title: 'charts',
       icon: 'chart'
     },
     children: [
@@ -90,7 +120,7 @@ export const asyncRouterMap = [
     redirect: '/order/table/complex-table',
     name: 'order',
     meta: {
-      title: '订单管理 ',
+      title: 'order ',
       icon: 'example'
     },
     children: [
@@ -104,25 +134,10 @@ export const asyncRouterMap = [
           icon: 'table'
         },
         children: [
-          { path: 'complex-table', component: _import('order/table/complexTable'), name: 'complexTable', meta: { title: '订单列表' }}
+          { path: 'complex-table', component: _import('order/table/complexTable'), name: 'complexTable', meta: { title: 'complexTable' }}
         ]
       },
       { path: 'tab/index', icon: 'tab', component: _import('order/tab/index'), name: 'tab', meta: { title: 'tab' }}
-    ]
-  },
-
-  {
-    path: '/user',
-    component: Layout,
-    redirect: '/user/userList',
-    name: 'user',
-    meta: {
-      title: '用户管理',
-      icon: 'excel'
-    },
-    children: [
-      { path: 'userList', component: _import('user/userList'), name: 'userList', meta: { title: '用户列表' }},
-      { path: 'upload-excel', component: _import('user/uploadExcel'), name: 'uploadExcel', meta: { title: 'uploadExcel' }}
     ]
   },
 
